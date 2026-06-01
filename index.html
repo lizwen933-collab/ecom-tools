@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境电商运营工具对比总表 v8.0</title>
+<style>
+:root{
+  --pri:#1a56db;--pri-l:#e8eeff;--pri-d:#0d3baa;
+  --ok:#0d9344;--ok-bg:#ecfdf5;--warn:#d97706;--warn-bg:#fffbeb;
+  --err:#dc2626;--err-bg:#fef2f2;--t1:#111827;--t2:#4b5563;--t3:#9ca3af;
+  --bg:#f0f2f5;--w:#fff;--bd:#e5e7eb;--bd2:#d1d5db;
+  --r:8px;--fn:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fn);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
+
+/* Header */
+.hd{
+  background:linear-gradient(135deg,#1a56db,#2563eb,#3b82f6);
+  color:#fff;padding:24px 28px;border-radius:12px;margin-bottom:16px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+  box-shadow:0 4px 20px rgba(26,88,219,.25);
+}
+.hd-left h1{font-size:22px;font-weight:800}
+.hd-left h1 small{font-weight:400;opacity:.78;font-size:13px;margin-left:10px}
+.hd-left p{font-size:12px;opacity:.72;margin-top:4px}
+.hd-right{text-align:right;font-size:12px}
+.status-bar{display:flex;gap:16px;font-size:11.5px;opacity:.85}
+.mode-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-view{background:rgba(255,255,255,.2)}
+.badge-edit{background:rgba(220,38,38,.5)}
+
+/* Buttons */
+.btn{
+  padding:7px 15px;border-radius:7px;font-size:11.5px;font-weight:600;
+  cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;
+  transition:all .15s ease;white-space:nowrap;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.btn-p{background:#fff;color:var(--pri)}.btn-p:hover{background:#f0f4ff}
+.btn-s{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn-s:hover{background:rgba(255,255,255,.32)}
+.btn-d{background:var(--err);color:#fff}.btn-d:hover{background:#b91c1c}
+.btn-g{background:var(--ok);color:#fff}.btn-g:hover{background:#059669}
+.btn-o{background:transparent;color:var(--t2);border:1px solid var(--bd2)}
+.btn-o:hover{border-color:var(--pri);color:var(--pri)}
+.hd-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:flex-end}
+
+/* Toolbar */
+.tb{
+  background:var(--w);border-radius:10px;padding:14px 18px;margin-bottom:14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.tb label{font-size:11.5px;font-weight:600;color:var(--t2);white-space:nowrap}
+.tb input[type=text]{
+  padding:7px 12px;border:1px solid var(--bd);border-radius:7px;font-size:11.5px;
+  outline:none;min-width:160px;transition:border-color .15s;
+}
+.tb input[type=text]:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l)}
+.tb input[type=password]{padding:6px 12px;border:1px solid rgba(255,255,255,.4);border-radius:7px;font-size:12px;background:rgba(255,255,255,.15);color:#fff;outline:none;width:120px}
+.sel{
+  padding:7px 28px 7px 11px;border:1px solid var(--bd);border-radius:7px;
+  font-size:11.5px;background:var(--w);cursor:pointer;outline:none;min-width:120px;
+  appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%239ca3af'%3E%3Cpath d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+.sel:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l)}
+
+/* Table container */
+.wrap{background:var(--w);border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* Table */
+table{width:max-content;border-collapse:collapse;min-width:100%}
+th,td{
+  border:1px solid var(--bd2);vertical-align:top;padding:0;position:relative;
+  transition:background .1s;
+}
+th{background:var(--bg)}
+
+/* Column headers */
+.th-tool{min-width:180px;text-align:center;padding:12px 10px;position:relative;background:linear-gradient(180deg,#f8faff,#f0f2f5)}
+.th-tool .del-col{
+  position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;
+  background:var(--err);color:#fff;font-size:10px;line-height:18px;text-align:center;
+  cursor:pointer;opacity:0;transition:opacity .15s;z-index:3;display:flex;align-items:center;justify-content:center;
+}
+.th-tool:hover .del-col{opacity:.7}
+.th-tool .drag-col{
+  position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:4px;
+  background:rgba(0,0,0,.08);color:var(--t2);font-size:14px;line-height:20px;text-align:center;
+  cursor:grab;opacity:0;transition:opacity .15s;z-index:3;display:flex;align-items:center;justify-content:center;
+  letter-spacing:-2px;
+}
+.th-tool:hover .drag-col{opacity:.7}
+.th-tool .drag-col:active{cursor:grabbing;background:var(--pri);color:#fff}
+.th-tool .emoji{font-size:28px;display:block;margin-bottom:4px}
+.th-tool .name{font-size:15px;font-weight:700;color:var(--t1)}
+.th-tool .name-en{font-size:10px;color:var(--t3);margin-top:1px}
+.th-tool .edit-name{
+  display:none;width:90%;margin:4px auto 0;text-align:center;font-size:13px;
+  padding:3px 6px;border:1px solid var(--pri);border-radius:5px;
+}
+.mode-edit .th-tool .name{display:none}
+.mode-edit .th-tool .edit-name{display:inline-block}
+.th-add{min-width:70px;text-align:center;padding:16px 10px;cursor:pointer;background:var(--bg);vertical-align:middle}
+.th-add:hover{background:var(--pri-l)}
+.th-add .plus{font-size:24px;color:var(--pri)}
+
+/* Row headers */
+.th-dim{
+  min-width:110px;max-width:150px;padding:8px 12px;font-size:11.5px;
+  font-weight:700;color:var(--t2);text-align:left;background:#fafbfc;
+  white-space:nowrap;position:sticky;left:0;z-index:2;
+}
+.th-dim .del-row{
+  position:absolute;top:4px;right:28px;width:16px;height:16px;border-radius:50%;
+  background:var(--err);color:#fff;font-size:9px;line-height:16px;text-align:center;
+  cursor:pointer;opacity:0;transition:opacity .15s;z-index:3;display:flex;align-items:center;justify-content:center;
+}
+.th-dim:hover .del-row{opacity:.7}
+.th-dim .drag-row{
+  position:absolute;top:4px;right:6px;width:16px;height:16px;border-radius:3px;
+  background:rgba(0,0,0,.08);color:var(--t2);font-size:12px;line-height:16px;text-align:center;
+  cursor:grab;opacity:0;transition:opacity .15s;z-index:3;display:flex;align-items:center;justify-content:center;
+  letter-spacing:-2px;
+}
+.th-dim:hover .drag-row{opacity:.7}
+.th-dim .drag-row:active{cursor:grabbing;background:var(--pri);color:#fff}
+.th-dim-edit{cursor:pointer;font-size:12px;margin-left:4px;opacity:.4;vertical-align:middle}
+.th-dim-edit:hover{opacity:1;color:var(--pri)}
+
+/* Data cells */
+.cell{padding:10px 12px;min-width:160px;max-width:300px;font-size:12px;word-break:break-word;cursor:default}
+.cell:hover{background:var(--pri-l)}
+.cell-num{text-align:center}
+.cell-tag{padding:8px 10px}
+.cell-long{font-size:11.5px;line-height:1.65;max-width:280px}
+
+/* Cell selected state (for image paste target) */
+.cell-selected{outline:2px solid var(--pri)!important;outline-offset:-2px;background:#f0f4ff!important;z-index:5}
+
+/* Score bar */
+.score-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:3px}
+.score-bar{width:80%;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;transition:width .3s}
+.score-val{font-size:16px;font-weight:800}
+.tag-high{background:#ecfdf5;color:#065f46;padding:1px 8px;border-radius:10px;font-size:9px}
+.tag-mid{background:#fffbeb;color:#92400e;padding:1px 8px;border-radius:10px;font-size:9px}
+.tag-low{background:#fef2f2;color:#991b1b;padding:1px 8px;border-radius:10px;font-size:9px}
+
+/* Tags in cells */
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;
+  font-weight:600;margin:1px;white-space:nowrap;
+}
+.tag-team{background:#eff6ff;color:#1e40af}.tag-personal{background:#f0fdf4;color:#166534}
+.tag-free{background:#ecfdf5;color:#047857}.tag-paid{background:#fffbeb;color:#a16207}
+.tag-pend{background:#fafafa;color:#6b7280;border:1px dashed var(--bd2)}.tag-custom{background:#fdf4ff;color:#86198f}
+
+/* Row separator */
+.row-sep td{background:#f0f2f5;font-size:11px;font-weight:700;color:var(--t3);padding:5px 14px;text-transform:uppercase;letter-spacing:1px;border-top:2px solid var(--bd)}
+
+/* Add row button */
+.tr-add td{text-align:center;padding:8px;background:#fafbfc}
+.add-row-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 24px;border:2px dashed var(--bd);border-radius:8px;color:var(--t3);cursor:pointer;font-size:12px;transition:all .15s}
+.add-row-btn:hover{border-color:var(--pri);color:var(--pri);background:#f0f4ff}
+
+/* Inline editor */
+.inline-editor{
+  position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;
+  border:none;padding:10px 12px;font-size:12px;font-family:var(--fn);
+  background:var(--w);z-index:10;outline:2px solid var(--pri);border-radius:0;
+  resize:none;
+}
+.inline-editor:focus{box-shadow:inset 0 0 0 1px var(--pri)}
+
+/* ====== DRAG & DROP ====== */
+.drag-over-left{box-shadow:inset 3px 0 0 var(--pri)!important}
+.drag-over-right{box-shadow:inset -3px 0 0 var(--pri)!important}
+.drag-over-top{box-shadow:inset 0 3px 0 var(--pri)!important}
+.drag-over-bottom{box-shadow:inset 0 -3px 0 var(--pri)!important}
+.drag-ghost{opacity:.4;background:var(--pri-l)!important}
+
+/* ====== IMAGE / ATTACHMENTS ====== */
+.cell-img-area{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;
+}
+.cell-thumb{
+  width:60px;height:60px;object-fit:cover;border-radius:6px;
+  border:1px solid var(--bd2);cursor:pointer;transition:transform .15s;
+  background:#f8f9fa;
+}
+.cell-thumb:hover{transform:scale(1.08);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.cell-img-del{
+  position:absolute;top:-6px;right:-6px;width:18px;height:18px;
+  border-radius:50%;background:var(--err);color:#fff;font-size:10px;
+  line-height:18px;text-align:center;cursor:pointer;display:none;
+  z-index:2;
+}
+.cell-img-wrap{position:relative;display:inline-flex}
+.cell-img-wrap:hover .cell-img-del{display:flex;align-items:center;justify-content:center}
+.paste-hint{
+  display:inline-flex;align-items:center;gap:3px;padding:3px 8px;
+  background:var(--pri-l);border-radius:5px;color:var(--pri);
+  font-size:10px;cursor:pointer;margin-top:4px;border:1px dashed var(--pri);
+}
+.paste-hint:hover{background:var(--pri);color:#fff}
+
+/* ====== AUTO LINKS ====== */
+.auto-link{
+  color:var(--pri);text-decoration:underline;cursor:pointer;
+  word-break:break-all;
+}
+.auto-link:hover{color:var(--pri-d)}
+.auto-link:visited{color:#7c3aed}
+.link-icon{font-size:10px;margin-left:2px;opacity:.6}
+
+/* ====== LIGHTBOX ====== */
+.img-lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;
+  display:none;align-items:center;justify-content:center;flex-direction:column;
+}
+.img-lightbox.active{display:flex}
+.img-lightbox-inner{
+  max-width:90vw;max-height:85vh;position:relative;
+}
+.img-lightbox-inner img{
+  max-width:100%;max-height:85vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);
+}
+.img-lightbar{
+  position:absolute;top:-30px;right:0;display:flex;gap:8px;
+}
+.img-lightbtn{
+  padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;
+  cursor:pointer;border:none;background:rgba(255,255,255,.95);color:#111;
+}
+.att-count{font-size:9px;color:var(--t3);margin-bottom:2px;font-weight:600}
+
+/* PIN Modal overlay */
+.pin-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;
+  display:none;align-items:center;justify-content:center;
+}
+.pin-overlay.active{display:flex}
+.pin-modal{
+  background:var(--w);border-radius:16px;padding:36px;min-width:340px;
+  text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.pin-modal h2{font-size:20px;margin-bottom:8px}
+.pin-modal p{color:var(--t2);font-size:13px;margin-bottom:20px}
+.pin-input-group{display:flex;gap:8px;justify-content:center}
+.pin-input-group input{
+  padding:10px 16px;border:2px solid var(--bd);border-radius:10px;font-size:18px;
+  width:160px;text-align:center;letter-spacing:6px;outline:none;
+}
+.pin-input-group input:focus{border-color:var(--pri)}
+.pin-btn{padding:10px 24px;border-radius:10px;font-size:14px;font-weight:700}
+
+/* Toast notification */
+.toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--t1);color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;
+  opacity:0;transition:all .3s;z-index:900;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Filter info */
+#filterInfo{font-size:11px;color:var(--warn);font-weight:600}
+
+/* Print styles */
+@media print{
+  .hd,.tb,.status-bar,.th-add,.tr-add,.th-dim-edit,.del-col,.del-row,.drag-col,.drag-row,
+  .hd-btns,.pin-area,.img-lightbox,.paste-hint,.cell-img-del{display:none!important}
+  .th-tool{background:#333!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cell{page-break-inside:avoid}
+  body{background:#fff}
+  .wrap{box-shadow:none}
+  .cell-selected{outline:none!important;background:inherit!important}
+}
+</style>
+</head>
+
+<body style="padding:20px;max-width:100%">
+
+<!-- ===== HEADER ===== -->
+<div class="hd">
+  <div class="hd-left">
+    <h1>📊 跨境电商运营工具对比总表 <small>v8.0</small></h1>
+    <p>记录试用过的所有第三方运营工具，方便随时查阅和对比选型 | 支持拖拽排序 · 图片粘贴 · 链接跳转</p>
+  </div>
+  <div class="hd-right">
+    <div class="status-bar">
+      <span id="modeBadge" class="mode-badge badge-view">👁️ 只读查看</span>
+      <span>已录入 <strong id="toolCount">0</strong> 个工具</span>
+      <span>更新于 <strong id="updateTime">—</strong></span>
+    </div>
+    <div class="hd-btns">
+      <div class="pin-area" id="pinArea">
+        <input type="password" id="headerPinInput" placeholder="输入编辑密码" onkeydown="if(event.key==='Enter')verifyPINfromHeader()">
+        <button class="btn btn-s" onclick="verifyPINfromHeader()">🔓 编辑</button>
+      </div>
+      <div class="hd-btns" id="editBtns" style="display:none">
+        <button class="btn btn-d" onclick="exitEditMode()">✕ 退出编辑</button>
+        <button class="btn btn-o" onclick="exportJSON()">💾 备份</button>
+        <button class="btn btn-o" onclick="importData()">📂 导入</button>
+      </div>
+      <div class="hd-btns" id="viewBtns">
+        <button class="btn btn-p" onclick="showPinModal()">🔓 切换编辑模式</button>
+        <button class="btn btn-o" onclick="exportCSV()">📥 导出CSV</button>
+        <button class="btn btn-o" onclick="window.print()">🖨️ 打印/PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOOLBAR ===== -->
+<div class="tb">
+  <label>平台</label>
+  <select class="sel" id="filtPlatform" onchange="doFilter()"><option value="">全部平台</option></select>
+
+  <label>搜索</label>
+  <input type="text" id="filtSearch" placeholder="输入工具名称或关键词..." oninput="doFilter()">
+
+  <span id="filterInfo"></span>
+
+  <div style="flex:1"></div>
+
+  <button class="btn btn-o" onclick="resetFilters()" style="font-size:11px">↺ 重置筛选</button>
+</div>
+
+<!-- ===== TABLE ===== -->
+<div class="wrap">
+  <div class="tbl-wrap">
+    <table>
+      <thead id="theadEl"></thead>
+      <tbody id="tbodyEl"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== IMAGE LIGHTBOX ===== -->
+<div class="img-lightbox" id="imgLightbox" onclick="closeLightbox(event)">
+  <div class="img-lightbox-inner" onclick="event.stopPropagation()">
+    <div class="img-lightbar">
+      <button class="img-lightbtn" onclick="closeLightbox()">✕ 关闭</button>
+    </div>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+</div>
+
+<!-- ===== PIN MODAL ===== -->
+<div class="pin-overlay" id="pinModal">
+  <div class="pin-modal">
+    <h2>🔐 需要验证身份</h2>
+    <p>请输入编辑密码以进入编辑模式</p>
+    <div class="pin-input-group">
+      <input type="password" id="pinInput" maxlength="8" onkeydown="if(event.key==='Enter')verifyPIN()">
+      <button class="btn btn-p pin-btn" onclick="verifyPIN()">确认</button>
+    </div>
+    <p style="margin-top:16px;font-size:11px;color:var(--t3)">
+      <button class="btn btn-o" style="font-size:10px;padding:4px 10px" onclick="closePinModal()">取消</button>
+    </p>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+// ============================================================
+//  CONFIGURATION
+// ============================================================
+const EDIT_PIN = '8888';
+const STORAGE_KEY = 'ectools_v8';
+
+// ============================================================
+//  DEFAULT DATA — 8 tools × 12 dimensions
+// ============================================================
+const DEFAULT_DATA = {
+  meta: { updatedAt: new Date().toISOString(), editor: 'Evelyn' },
+  platforms: ['Amazon','Shopee','TikTok','Temu','Lazada','AliExpress','Ozon','独立站','多平台'],
+  priceTags: ['免费','有免费版','仅付费','订阅制'],
+  procureTags: ['待评估','建议团队采购','适合个人自费','已购入-团队','已购入-个人'],
+
+  dims: [
+    { group: '基本信息', key: 'name',        label: '工具名称',   type: 'text' },
+    { group: '基本信息', key: 'positioning', label: '工具定位',   type: 'longtext' },
+    { group: '基本信息', key: 'platforms',   label: '适配平台',   type: 'tags' },
+    { group: '基本信息', key: 'coreFeatures',label: '核心功能',   type: 'longtext' },
+
+    { group: '价格信息', key: 'pricingModel',   label: '收费模式',     type: 'text' },
+    { group: '价格信息', key: 'officialPrice',  label: '官方报价/套餐',type: 'longtext' },
+    { group: '价格信息', key: 'freeQuota',      label: '免费额度/试用期限', type: 'longtext' },
+
+    { group: '评估',     key: 'dataAccuracy',  label: '数据准确性', type: 'score' },
+    { group: '评估',     key: 'difficulty',     label: '操作难度',   type: 'score' },
+
+    { group: '试用评价', key: 'pros',          label: '优点',       type: 'longtext' },
+    { group: '试用评价', key: 'cons',          label: '缺点',       type: 'longtext' },
+    { group: '试用评价', key: 'userNotes',     label: '使用感受',   type: 'longtext' }
+  ],
+
+  tools: [
+    // ==================== 1. 知虾 ====================
+    {
+      emoji:'🦐', name:'知虾', nameEn:'Zhixia',
+      positioning:'Shopee平台全链路数据分析工具，覆盖选品、竞品、关键词、广告等运营全场景，是Shopee卖家最常用的数据工具之一。',
+      platforms:['Shopee'],
+      coreFeatures:'• Shopee商品数据采集与分析\n• 热销榜、新品榜、飙升榜等多维度榜单\n• 竞品店铺监控与追踪\n• 关键词挖掘与搜索量分析\n• 广告投放效果分析\n• 利润计算器\n• 选品数据库（覆盖东南亚多国站点）',
+      pricingModel:'月付 / 年付（年付约8折）',
+      officialPrice:'基础版 ¥198/月\n专业版 ¥298/月\n旗舰版 ¥398/月',
+      freeQuota:'注册送3天免费试用；部分基础功能可有限制地免费用（如每日查询次数限制）',
+      dataAccuracy:76,
+      difficulty:62,
+      pros:'✦ Shopee平台数据覆盖全面，东南亚各站点都支持\n✦ 选品库数据量大、更新及时\n✦ 界面中文友好，上手速度快\n✦ 有手机端可随时查看数据\n✦ 热销榜单和飙升榜对选品参考价值大',
+      cons:'✦ 仅支持Shopee单一平台，无法用于亚马逊等其他平台\n✦ 高级功能需要专业版或旗舰版才能解锁\n✦ 部分数据准确性有待实际业务验证\n✦ 免费版查询次数限制较紧，不够用\n✦ 关键词功能相对弱于专业关键词工具',
+      userNotes:'目前还在试用阶段。作为Shopee运营的核心数据工具，选品和竞品监控功能用得最多。热销榜每天会看，用来发现新的品类机会。整体感觉界面清晰但深度分析能力一般，适合日常运营快速查看数据用。',
+      _images:{}
+    },
+
+    // ==================== 2. 卖家精灵 ====================
+    {
+      emoji:'🧚', name:'卖家精灵', nameEn:'SellerSprite',
+      positioning:'亚马逊全能型数据工具，国内头部品牌。涵盖选品分析、关键词研究、Listing优化、PPC广告管理等全方位运营需求。',
+      platforms:['Amazon'],
+      coreFeatures:'• 亚马逊海量商品数据库（多国家站点）\n• 选品市场容量与竞争度分析\n• 关键词挖掘与反向ASIN查词\n• Listing质量评分与优化建议\n• PPC广告优化与ACOS监控\n• 竞品ASIN追踪与下架监控\n• 利润计算器与FBA费用估算\n• AI生成Listing文案',
+      pricingModel:'月付 / 年付（年付约67折）',
+      officialPrice:'轻量版 $39.99/月\n标准版 $79.99/月\n专业版 $119.99/月\n旗舰版 $149.99/月',
+      freeQuota:'Chrome插件基础功能永久免费；网页版注册赠送部分免费查询额度；每日有限次免费查询',
+      dataAccuracy:88,
+      difficulty:70,
+      pros:'✦ 亚马逊领域最全面的国产工具之一\n✦ Chrome插件+网页+桌面端多端体验好\n✦ 数据更新频率高，准确度在同类工具中靠前\n✦ AI文案生成功能实用，节省大量写Listing的时间\n✦ 社区和教程资源丰富，新手学习成本低',
+      cons:'✦ 价格偏高，尤其是专业版和旗舰版\n✦ 新手完全上手需要一定学习成本\n✦ 部分高级功能需要单独购买或升级版本\n✦ 国内访问速度偶尔不稳定\n✦ 年付虽然打折但一次性投入仍较大',
+      userNotes:'正在试用标准版。选品分析和关键词功能用得最多，特别是市场容量分析和反查ASIN关键词这两个功能很常用。AI写Listing的功能试了一下，生成的内容框架还不错但需要人工微调。整体感觉是功能非常全面但也因此有点复杂。',
+      _images:{}
+    },
+
+    // ==================== 3. 西柚找词 ====================
+    {
+      emoji:'🍊', name:'西柚找词', nameEn:'Xiyu Keywords',
+      positioning:'专注跨境电商关键词研究与SEO优化的垂直工具。以关键词挖掘为核心竞争力，辅助Listing撰写和SEO策略制定。',
+      platforms:['Amazon'],
+      coreFeatures:'• 亚马逊关键词深度挖掘\n• 关键词搜索量、竞价、推荐排序等多维数据\n• 长尾词发现与拓展\n• ASIN反查关键词\n• 关键词自然排名与广告排名追踪\n• Listing埋词建议与SEO评分\n• 竞品关键词对比分析',
+      pricingModel:'月付 / 年付',
+      officialPrice:'入门版 ¥68/月\n标准版 ¥168/月\n专业版 ¥298/月',
+      freeQuota:'注册后赠送一定免费查询次数；基础词库可免费查看；每日限量使用免费额度',
+      dataAccuracy:82,
+      difficulty:55,
+      pros:'✦ 关键词数据非常详细和深入，专业度高\n✦ 价格亲民，入门版68元门槛低\n✦ 中文界面友好，操作直观\n✦ 关键词挖掘算法做得不错，长尾词推荐质量高\n✦ ASIN反查关键词功能好用',
+      cons:'✦ 功能方向单一，只聚焦关键词\n✦ 不支持除Amazon以外的平台\n✦ 数据更新频率中等，不是实时更新\n✦ 高级分析功能需要专业版\n✦ 缺少批量导出和自动化能力',
+      userNotes:'已经自费购买了标准版¥168/月。这是我目前最常打开的关键词工具，主要用来做新品上架前的关键词调研和Listing SEO优化。长尾词挖掘功能很好用，经常能找到一些竞争小但有搜索量的词。缺点就是只能做关键词这一件事。',
+      _images:{}
+    },
+
+    // ==================== 4. SIF关键词 ====================
+    {
+      emoji:'🔑', name:'SIF关键词', nameEn:'SIF Keywords',
+      positioning:'专注亚马逊关键词研究与优化的效率工具，以"快"和"准"著称。核心优势在于关键词数据刷新速度和搜索结果的实时性。',
+      platforms:['Amazon'],
+      coreFeatures:'• 亚马逊关键词实时挖掘（数据刷新快）\n• ASIN反向查询关键词\n• 关键词搜索量、自然排名、广告排名数据\n• 关键词拓词与相关词推荐\n• Listing关键词密度检查与优化建议\n• 关键词排名变动追踪\n• 批量查询与导出\n• 多国站点支持（美/英/德/日等）',
+      pricingModel:'月付 / 年付 / 按次付费',
+      officialPrice:'体验版 免费（有限额）\n基础版 ¥199/月\n专业版 ¥499/月\n另有按次充值套餐可选',
+      freeQuota:'新用户注册送免费体验额度；体验版每日可免费查询一定次数；无需绑卡即可开始试用',
+      dataAccuracy:85,
+      difficulty:52,
+      pros:'✦ 数据刷新速度很快，关键词结果接近实时\n✦ 反查ASIN关键词功能强大且准确\n✦ 操作简单直观，学习成本低\n✦ 支持批量查询，效率高\n✦ 价格适中，有按次付费选项灵活性好',
+      cons:'✦ 品牌知名度不如卖家精灵和Helium 10\n✦ 功能范围偏窄，主要聚焦关键词\n✦ 选品和市场分析功能较弱或没有\n✦ 界面设计相对朴素\n✦ 客服和社区资源相对较少',
+      userNotes:'试用中，对比西柚找词来说SIF的数据刷新更快一些，特别是在查竞品ASIN的关键词时候感觉数据更及时。价格比西柚贵一点但在可接受范围内。如果后续确定主要做亚马逊的话可能会考虑正式购买，目前和西柚交叉使用中。',
+      _images:{}
+    },
+
+    // ==================== 5. Sorftime ====================
+    {
+      emoji:'📊', name:'Sorftime', nameEn:'Sorftime',
+      positioning:'亚马逊细分市场分析与选品决策工具，以独特的"细分市场"视角帮助卖家找到真正的蓝海机会，避免盲目进入红海品类。',
+      platforms:['Amazon'],
+      coreFeatures:'• 细分市场自动识别与分析\n• 蓝海/红海市场判定与可视化\n• 品类竞争格局分析（头部卖家占比等）\n• 价格区间分布分析\n• 新品切入可行性评估\n• Best Seller变动趋势追踪\n• 利润率估算与定价建议\n• 多维度数据交叉筛选',
+      pricingModel:'月付 / 年付 / 免费版',
+      officialPrice:'免费版 可用（功能受限）\n专业版 $19.99/月\n团队版 $49.99/月\n企业版 定制报价',
+      freeQuota:'免费版永久可用，包含基础的品类分析功能和有限查询次数；大部分核心功能需付费解锁；注册无需信用卡',
+      dataAccuracy:80,
+      difficulty:58,
+      pros:'✦ "细分市场"的分析视角独特，区别于传统选品工具\n✦ 蓝海红海判断直观，可视化做得好\n✦ 免费版就能体验到核心价值\n✦ 价格亲民，专业版仅$19.99/月\n✦ 对新卖家选品避坑很有帮助',
+      cons:'✦ 只做选品分析，不涉及关键词/广告/Listing等功能\n✦ 数据深度不如卖家精灵/Helium 10全面\n✦ 仅支持Amazon\n✦ 部分细分市场的分类逻辑有时不够精确\n✦ 国际品牌，中文支持和客服响应一般',
+      userNotes:'试用了一段时间。它的最大特色是用"细分市场"的角度来看选品，这个思路和其他工具不太一样。比如它会告诉你一个品类里不同价位段分别有多少机会。对于选品初期做方向判断挺有用的，但不适合做精细化运营。免费版可以先试试看够不够用。',
+      _images:{}
+    },
+
+    // ==================== 6. 领星ERP ====================
+    {
+      emoji:'⭐', name:'领星ERP', nameEn:'LingXing ERP',
+      positioning:'专为跨境电商打造的全流程ERP管理系统，覆盖采购、仓储、物流、财务、客服等运营全链条，是规模化卖家的后端管理核心系统。',
+      platforms:['Amazon','Shopee','TikTok Shop','独立站','多平台'],
+      coreFeatures:'• 多平台店铺统一管理\n• 采购管理与供应链协同\n• 库存管理（多仓库/多SKU）\n• 订单处理与物流跟踪\n• 财务核算（利润/回款/费用分析）\n• 客服消息统一收发与模板管理\n• 数据报表与经营分析看板\n• 权限管理与团队协作',
+      pricingModel:'月付 / 年付（按订单量/功能模块阶梯定价）',
+      officialPrice:'入门版 ¥998/月（限量订单）\n标准版 ¥2,980/月\n专业版 ¥5,980/月\n企业版 定制报价\n具体价格根据店铺数量和订单量浮动',
+      freeQuota:'提供14天免费试用；需联系销售开通；部分基础功能演示账号可申请体验',
+      dataAccuracy:90,
+      difficulty:75,
+      pros:'✦ 国产ERP中对跨境电商支持最好的之一\n✦ 多平台统一管理能力强\n✦ 财务核算功能完善，利润计算准确\n✦ 数据安全性高，有完善的权限体系\n✦ 客服响应和技术支持较好\n✦ 适合团队规模化和规范化运营',
+      cons:'✦ 价格较高，中小卖家负担重\n✦ 上线和实施周期较长，需要培训学习\n✦ 功能复杂度高，前期配置工作量大\n✦ 部分高级功能需要额外付费模块\n✦ 对单人或小团队来说过于重量级',
+      userNotes:'目前还在了解阶段，向销售要了演示账号在看。领星这种ERP工具更适合我们团队规模扩大以后再上。先记录着等团队扩展到合适规模再提采购申请。',
+      _images:{}
+    },
+
+    // ==================== 7. Helium 10 ====================
+    {
+      emoji:'🔮', name:'Helium 10', nameEn:'Helium10',
+      positioning:'全球知名的亚马逊全能工具套件，被誉为亚马逊工具中的"瑞士军刀"。从产品研究到关键词研究再到Listing优化和广告管理，一站式覆盖。',
+      platforms:['Amazon'],
+      coreFeatures:'• Black Box 产品数据库与智能选品\n• Cerebro 关键词研究（多ASIN对比）\n• Magnet 关键词挖掘器\n• Frankenstein AI Listing生成器\n• Xray Chrome插件（页面即时数据抓取）\n• Marks 知识产权/商标监测\n• Adtomic 广告管理与优化\n• Inventory Protector 库存保护\n• Alerts 跟踪提醒\n• Profits 利润计算器',
+      pricingModel:'月付 / 年付 / 终身会员',
+      officialPrice:'Starter $29/月\nPlatinum $49/月\nDiamond $89/月\nElite $129/月\nTitanium $199/月\n终身会员 $999-$2499（一次性）',
+      freeQuota:'免费计划（Starter Free）：Black Box每日5次查询、关键词每月2次查询等限制；注册无需信用卡；付费计划均有7天退款保证',
+      dataAccuracy:90,
+      difficulty:72,
+      pros:'✦ 功能极其全面，亚马逊工具中的"瑞士军刀"\n✦ 数据库规模大（超4.5亿产品数据），更新频繁\n✦ Chrome插件(Xray)方便快捷\n✦ Cerebro的多ASIN关键词对比功能独树一帜\n✦ 国际化程度高，全球卖家广泛使用\n✦ 教程和社区资源丰富',
+      cons:'✦ 价格较高，尤其是Diamond以上套餐\n✦ 全英文界面，国内卖家有一定语言门槛\n✦ 客服存在时差问题，响应不一定及时\n✦ 免费版限制较多，基本只能尝鲜\n✦ 国内访问需要稳定的网络环境',
+      userNotes:'试用过免费版和Platinum短期体验。Helium 10的功能确实是最全面的，特别是Cerebro（多产品关键词对比）和Xray插件非常好用。但价格对我们目前的体量来说偏高了，而且全英文界面对团队其他成员可能有门槛。目前先用卖家精灵+西柚/SIF的组合来覆盖类似功能。',
+      _images:{}
+    },
+
+    // ==================== 8. Jungle Scout ====================
+    {
+      emoji:'📈', name:'Jungle Scout', nameEn:'JungleScout',
+      positioning:'亚马逊选品与销售分析的先驱工具和行业标杆品牌，以销售数据估算精度著称。是很多亚马逊卖家的第一款专业工具。',
+      platforms:['Amazon'],
+      coreFeatures:'• Extension 浏览器插件即时数据显示\n• Opportunity Finder 蓝海机会产品发现\n• Keyword Scout 关键词研究与搜索量\n• Supplier Database 供应商数据库\n• Sales Analytics 销售数据分析面板\n• Inventory Manager 库存管理与补货提醒\n• Review Automation 评论管理与自动化\n• Academy 在线培训和课程体系\n• Alerts 变动跟踪（价格/排名/评论）\n• Listing Builder Listing创建助手',
+      pricingModel:'月付 / 年付',
+      officialPrice:'Basic $39/月\nSuite $59/月\nProfessional $99/月\nBusiness $249/月',
+      freeQuota:'7天免费试用（需绑定信用卡）；部分基础浏览器插件功能可免费使用；试用期结束前可取消不扣费',
+      dataAccuracy:90,
+      difficulty:65,
+      pros:'✦ 行业老牌（2015年成立），信誉度和品牌力强\n✦ 销售数据估算精度业内领先\n✦ 供应商数据库(Supplier Database)是独有价值点\n✦ Academy培训课程体系完善，对新手上路帮助大\n✦ Extension浏览器插件体验流畅\n✦ 经常被行业报告引用为权威数据源',
+      cons:'✦ 功能广度和深度不及Helium 10\n✦ 性价比中等偏下，Business版$249偏贵\n✦ 国内网络访问速度慢（服务器在海外）\n✦ 中小卖家版本阉割明显\n✦ 关键词功能相比专业关键词工具有差距\n✦ 全英文界面',
+      userNotes:'试用过Suite版。Jungle Scout给我印象最深的是它的销售数据估算确实准（跟实际销量偏差不大），以及供应商数据库这个功能很有意思——可以直接从工具里找货源。但总体来说功能没有Helium 10那么全，而且访问速度在国内比较慢。如果主要需求是选品+找供应商的话值得考虑。',
+      _images:{}
+    }
+  ]
+};
+
+// ============================================================
+//  STATE
+// ============================================================
+let DATA = null;
+let isEditMode = false;
+let currentCell = null;
+let selectedCell = null; // for image paste targeting
+let dragInfo = null;    // {type:'col'|'row', index, element}
+
+// ============================================================
+//  INIT
+// ============================================================
+window.onload = function() {
+  load();
+  sanitizeAllImages();
+  renderAll();
+  setupPlatformOptions();
+  setupGlobalPaste();
+  setupClickOutside();
+};
+
+function sanitizeAllImages() {
+  // Ensure all tools have _images object
+  for (var i = 0; i < (DATA.tools || []).length; i++) {
+    if (!DATA.tools[i]._images) DATA.tools[i]._images = {};
+  }
+}
+
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try {
+      DATA = JSON.parse(raw);
+      if (!DATA.tools || !DATA.dims) throw new Error('invalid');
+    } catch(e) {
+      DATA = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+  } else {
+    DATA = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+  sanitizeAllImages();
+}
+
+function save() {
+  if (!DATA) return;
+  DATA.meta.updatedAt = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  var ut = document.getElementById('updateTime');
+  if (ut) ut.textContent = formatTime(DATA.meta.updatedAt);
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+function renderAll() {
+  renderTableHead();
+  renderTableBody();
+  updateStats();
+  updateModeUI();
+}
+
+function getFilteredTools() {
+  var tools = DATA.tools || [];
+  var fp = document.getElementById('filtPlatform');
+  var fs = document.getElementById('filtSearch');
+  var fpv = fp ? fp.value : '';
+  var fsv = fs ? fs.value : '';
+
+  if (fpv) tools = tools.filter(function(t) {
+    return t.platforms && t.platforms.indexOf(fpv) > -1;
+  });
+  if (fsv && fsv.trim()) {
+    var sv = fsv.trim().toLowerCase();
+    tools = tools.filter(function(t) {
+      return (t.name||'').toLowerCase().indexOf(sv) > -1 ||
+             (t.nameEn||'').toLowerCase().indexOf(sv) > -1 ||
+             (t.positioning||'').toLowerCase().indexOf(sv) > -1;
+    });
+  }
+  return tools;
+}
+
+function renderTableHead() {
+  var el = document.getElementById('theadEl');
+  var tools = getFilteredTools();
+  var h = '<tr>';
+  h += '<th class="th-dim"><div style="font-size:10px;color:var(--t3)">维度 \\ 工具</div></th>';
+
+  for (var i = 0; i < tools.length; i++) {
+    var t = tools[i];
+    var realIdx = findRealToolIndex(t);
+    h += '<th class="th-tool" data-ci="' + i + '" data-ri="' + realIdx + '"';
+    if (isEditMode) {
+      h += ' draggable="true"';
+    }
+    h += '>';
+    if (isEditMode) {
+      h += '<div class="del-col" title="删除此工具列" onclick="deleteTool(' + i + ')">&#x2715;</div>';
+      h += '<div class="drag-col" title="拖拽排序" onmousedown="event.stopPropagation()">⋮</div>';
+    }
+    h += '<div class="emoji">' + esc(t.emoji || '&#x1F527') + '</div>';
+    h += '<div class="name">' + esc(t.name) + '</div>';
+    h += '<div class="name-en">' + esc(t.nameEn || '') + '</div>';
+    if (isEditMode) {
+      h += '<input class="edit-name" value="' + esc(t.name) + '" data-ci="' + i + '" ';
+      h += 'onblur="saveHeaderEdit(this)" onkeydown="if(event.keyCode===13){event.preventDefault();this.blur();}">';
+    }
+    h += '</th>';
+  }
+
+  h += '<th class="th-add" onclick="' + (isEditMode ? 'showAddTool()' : '') + '">';
+  h += '<div class="plus">+</div><div style="font-size:10px;color:var(--t3);margin-top:4px">新增工具</div>';
+  h += '</th>';
+  h += '</tr>';
+  el.innerHTML = h;
+
+  // Attach column drag events
+  if (isEditMode) {
+    var ths = el.querySelectorAll('.th-tool[draggable]');
+    for (var j = 0; j < ths.length; j++) {
+      ths[j].addEventListener('dragstart', onColDragStart);
+      ths[j].addEventListener('dragover', onColDragOver);
+      ths[j].addEventListener('dragleave', onColDragLeave);
+      ths[j].addEventListener('drop', onColDrop);
+      ths[j].addEventListener('dragend', onDragEnd);
+    }
+  }
+}
+
+function renderTableBody() {
+  var el = document.getElementById('tbodyEl');
+  var tools = getFilteredTools();
+  var dims = DATA.dims || [];
+  var body = '';
+  var lastGroup = '';
+
+  for (var di = 0; di < dims.length; di++) {
+    var dim = dims[di];
+    if (dim.group !== lastGroup) {
+      if (lastGroup !== '') {
+        body += '<tr class="row-sep"><td colspan="' + (tools.length + 2) + '">' + esc(dim.group) + '</td></tr>';
+      }
+      lastGroup = dim.group;
+    }
+
+    body += '<tr data-di="' + di + '">';
+    body += '<th class="th-dim" data-di="' + di + '"';
+    if (isEditMode) {
+      body += ' draggable="true"';
+    }
+    body += '><div>' + esc(dim.label) + '</div>';
+    if (isEditMode) {
+      body += '<span class="th-dim-edit" onclick="renameDim(' + di + ')">&#x270F;&#xFE0F;</span>';
+      body += '<div class="del-row" title="删除此行" onclick="deleteDim(' + di + ')">&#x2715;</div>';
+      body += '<div class="drag-row" title="拖拽排序" onmousedown="event.stopPropagation()">⋮</div>';
+    }
+    body += '</th>';
+
+    for (var ci = 0; ci < tools.length; ci++) {
+      body += renderCell(tools[ci], dim, ci);
+    }
+    body += '<td style="background:#fafafa"></td>';
+    body += '</tr>';
+  }
+
+  if (isEditMode) {
+    body += '<tr class="tr-add"><td colspan="' + (tools.length + 2) + '">';
+    body += '<div class="add-row-btn" onclick="showAddRow()"><span>&#x2795;</span> 新增自定义维度行</div>';
+    body += '</td></tr>';
+  }
+  el.innerHTML = body;
+
+  // Attach row drag events
+  if (isEditMode) {
+    var ths = el.querySelectorAll('.th-dim[draggable]');
+    for (var k = 0; k < ths.length; k++) {
+      ths[k].addEventListener('dragstart', onRowDragStart);
+      ths[k].addEventListener('dragover', onRowDragOver);
+      ths[k].addEventListener('dragleave', onRowDragLeave);
+      ths[k].addEventListener('drop', onRowDrop);
+      ths[k].addEventListener('dragend', onDragEnd);
+    }
+  }
+
+  // Attach cell selection handlers
+  var cells = el.querySelectorAll('td.cell');
+  for (var c = 0; c < cells.length; c++) {
+    cells[c].addEventListener('click', onCellClick);
+  }
+}
+
+function renderCell(tool, dim, ci) {
+  var val = tool[dim.key];
+  var cls = 'cell';
+  var content = '';
+  var dataType = dim.type;
+
+  if (dataType === 'score') {
+    cls += ' cell-num';
+    var sv = Number(val) || 0;
+    var sc = sv >= 80 ? '#0d9344' : sv >= 60 ? '#d97706' : '#dc2626';
+    var sl = sv >= 80 ? '高' : sv >= 60 ? '中' : '低';
+    var slc = sv >= 80 ? 'tag-high' : sv >= 60 ? 'tag-mid' : 'tag-low';
+    content = '<div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill" style="width:'+sv+'%;background:'+sc+'"></div></div>';
+    content += '<span class="score-val">' + (val || '\u2014') + '</span>';
+    content += '<span class="tag ' + slc + '" style="font-size:9px">' + sl + '</span></div>';
+
+  } else if (dataType === 'tags') {
+    cls += ' cell-tag';
+    if (Array.isArray(val) && val.length > 0) {
+      var tags = [];
+      for (var ti = 0; ti < val.length; ti++) {
+        tags.push('<span class="tag ' + getTagCls(val[ti]) + '">' + esc(val[ti]) + '</span>');
+      }
+      content = tags.join('');
+    } else {
+      content = '<span style="color:var(--t3)">\u2014</span>';
+    }
+
+  } else {
+    if (dataType === 'longtext') cls += ' cell-long';
+    var raw = val != null ? String(val) : '';
+    var escaped = esc(raw);
+    var linked = linkify(escaped);
+    content = linked;
+  }
+
+  // Append images for this cell
+  var imgHtml = renderCellImages(tool, dim.key);
+
+  var editAttr = isEditMode
+    ? ' ondblclick="startEdit(this,' + ci + ',\'' + dim.key + '\',\'' + dataType + '\')"'
+    : '';
+
+  var realIdx = findRealToolIndex(tool);
+  return '<td class="' + cls + '" data-ci="' + ci + '" data-key="' + dim.key + '" data-type="' + dataType + '" data-ri="' + realIdx + '"' + editAttr + '>' + content + imgHtml + '</td>';
+}
+
+function renderCellImages(tool, dimKey) {
+  var imgs = (tool._images && tool._images[dimKey]) ? tool._images[dimKey] : [];
+  if (!imgs || imgs.length === 0) return '';
+
+  var html = '<div class="cell-img-area">';
+  for (var i = 0; i < imgs.length; i++) {
+    html += '<div class="cell-img-wrap">';
+    html += '<img class="cell-thumb" src="' + imgs[i] + '" onclick="openLightbox(\'' + imgs[i] + '\')" title="点击查看大图">';
+    if (isEditMode) {
+      html += '<div class="cell-img-del" onclick="deleteCellImage(\'' + dimKey + '\',' + i + ')" title="删除图片">&#x2715;</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+//  LINK DETECTION
+// ============================================================
+function linkify(html) {
+  // Scan for URLs in already-escaped HTML content
+  // Avoid matching inside HTML tags
+  var urlRegex = /(https?:\/\/[^\s<>"'\u3001\u3002\uff0c\uff1b]+)/gi;
+  return html.replace(urlRegex, function(url) {
+    // Clean trailing punctuation that might have been caught
+    var clean = url.replace(/[.,;:!?)\]}]+$/, '');
+    var trail = url.slice(clean.length);
+    return '<a href="' + clean + '" target="_blank" rel="noopener noreferrer" class="auto-link" title="点击跳转: ' + clean + '">' + clean + '<span class="link-icon">&#x2197;</span></a>' + trail;
+  });
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function esc(s) {
+  if (!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML.replace(/\n/g, '<br>');
+}
+
+function formatTime(iso) {
+  if (!iso) return '\u2014';
+  try { return new Date(iso).toLocaleString('zh-CN'); } catch(e) { return iso; }
+}
+
+function getTagCls(tag) {
+  if (!tag) return 'tag-pend';
+  var t = String(tag).toLowerCase();
+  if (t.indexOf('\u514d\u8D39') > -1) return 'tag-free';
+  if (t.indexOf('\u4ED8\u8D39') > -1 || t.indexOf('\u8BA2\u9605') > -1) return 'tag-paid';
+  if (t.indexOf('\u56E2\u961F') > -1 || t.indexOf('\u4F01\u4E1A') > -1) return 'tag-team';
+  if (t.indexOf('\u4E2A\u4EBA') > -1) return 'tag-personal';
+  if (t.indexOf('\u5F85\u8BC4\u4F30') > -1) return 'tag-pend';
+  return 'tag-custom';
+}
+
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show';
+  setTimeout(function() { el.classList.remove('show'); }, 2000);
+}
+
+function findRealToolIndex(tool) {
+  for (var i = 0; i < (DATA.tools || []).length; i++) {
+    if (DATA.tools[i].name === tool.name && DATA.tools[i].nameEn === (tool.nameEn || '')) return i;
+  }
+  return -1;
+}
+
+// ============================================================
+//  FILTERS
+// ============================================================
+function setupPlatformOptions() {
+  var sel = document.getElementById('filtPlatform');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">\u5168\u90E8\u5E73\u53F0</option>';
+  var plats = DATA.platforms || [];
+  for (var i = 0; i < plats.length; i++) {
+    sel.innerHTML += '<option value="' + esc(plats[i]) + '">' + esc(plats[i]) + '</option>';
+  }
+  sel.innerHTML += '<option value="__ADD__">＋ \u81EA\u5B9A\u4E49...</option>';
+
+  sel.onchange = function() {
+    if (this.value === '__ADD__') {
+      var nv = prompt('\u8F93\u5165\u65B0\u5E73\u53F0\u540D\u79F0:');
+      if (nv && nv.trim()) {
+        DATA.platforms.push(nv.trim());
+        this.value = nv.trim();
+        save();
+      }
+    }
+    doFilter();
+  };
+}
+
+function doFilter() {
+  renderAll();
+  var info = document.getElementById('filterInfo');
+  var total = (DATA.tools || []).length;
+  var shown = getFilteredTools().length;
+  if (info) {
+    info.textContent = shown < total ? '\u663E\u793A ' + shown + '/' + total + ' \u4E2A\u5DE5\u5177' : '';
+  }
+}
+
+function resetFilters() {
+  var fp = document.getElementById('filtPlatform');
+  var fs = document.getElementById('filtSearch');
+  if (fp) fp.value = '';
+  if (fs) fs.value = '';
+  doFilter();
+}
+
+function updateStats() {
+  var tc = document.getElementById('toolCount');
+  if (tc) tc.textContent = (DATA.tools || []).length;
+  var ut = document.getElementById('updateTime');
+  if (ut) ut.textContent = DATA.meta ? formatTime(DATA.meta.updatedAt) : '\u2014';
+}
+
+// ============================================================
+//  MODE SWITCHING
+// ============================================================
+function updateModeUI() {
+  var badge = document.getElementById('modeBadge');
+  var pinArea = document.getElementById('pinArea');
+  var editBtns = document.getElementById('editBtns');
+  var viewBtns = document.getElementById('viewBtns');
+
+  if (isEditMode) {
+    document.body.className = 'mode-edit';
+    if (badge) { badge.className = 'mode-badge badge-edit'; badge.innerHTML = '&#x270F;\uFE0F \u7F16\u8F91\u6A21\u5F0F'; }
+    if (pinArea) pinArea.style.display = 'none';
+    if (editBtns) editBtns.style.display = 'flex';
+    if (viewBtns) viewBtns.style.display = 'none';
+  } else {
+    document.body.className = 'mode-view';
+    if (badge) { badge.className = 'mode-badge badge-view'; badge.innerHTML = '&#x1F441; \u53EA\u8BFB\u67E5\u770B'; }
+    if (pinArea) pinArea.style.display = 'flex';
+    if (editBtns) editBtns.style.display = 'none';
+    if (viewBtns) viewBtns.style.display = 'flex';
+  }
+}
+
+function enterEditMode() {
+  isEditMode = true;
+  updateModeUI();
+  clearSelectedCell();
+  renderAll();
+  showToast('\u5DF2\u8FDB\u5165\u7F16\u8F91\u6A21\u5F0F');
+}
+
+function exitEditMode() {
+  isEditMode = false;
+  cancelEdit();
+  clearSelectedCell();
+  updateModeUI();
+  renderAll();
+  save();
+  showToast('\u5DF2\u9000\u51FA\u7F16\u8F91\u6A21\u5F0F\uFF0C\u6570\u636E\u5DF2\u4FDD\u5B58');
+}
+
+// ============================================================
+//  PIN
+// ============================================================
+function verifyPIN() {
+  var pin = document.getElementById('pinInput');
+  if (!pin) return;
+  if (pin.value === EDIT_PIN) {
+    closePinModal();
+    enterEditMode();
+  } else {
+    alert('\u5BC6\u7801\u9519\u8BEF\uFF01');
+    pin.value = '';
+    pin.focus();
+  }
+}
+
+function verifyPINfromHeader() {
+  var pin = document.getElementById('headerPinInput');
+  if (!pin) return;
+  if (pin.value === EDIT_PIN) {
+    pin.value = '';
+    enterEditMode();
+  } else {
+    alert('\u5BC6\u7801\u9519\u8BEF\uFF01');
+    pin.value = '';
+    pin.focus();
+  }
+}
+
+function showPinModal() {
+  var m = document.getElementById('pinModal');
+  if (m) m.classList.add('active');
+  setTimeout(function() {
+    var p = document.getElementById('pinInput');
+    if (p) p.focus();
+  }, 100);
+}
+
+function closePinModal() {
+  var m = document.getElementById('pinModal');
+  if (m) m.classList.remove('active');
+  var p = document.getElementById('pinInput');
+  if (p) p.value = '';
+}
+
+// ============================================================
+//  CELL SELECTION (for image paste targeting)
+// ============================================================
+function onCellClick(e) {
+  var td = e.target.closest('td.cell');
+  if (!td) return;
+
+  // Don't interfere with double-click editing or image clicks
+  if (e.target.closest('.cell-thumb') || e.target.closest('.cell-img-del') || e.target.closest('.auto-link')) return;
+
+  selectCell(td);
+}
+
+function selectCell(td) {
+  clearSelectedCell();
+  selectedCell = td;
+  td.classList.add('cell-selected');
+}
+
+function clearSelectedCell() {
+  if (selectedCell) {
+    selectedCell.classList.remove('cell-selected');
+    selectedCell = null;
+  }
+}
+
+function setupClickOutside() {
+  document.addEventListener('click', function(e) {
+    if (selectedCell && !e.target.closest('td.cell') && !e.target.closest('.inline-editor') && !e.target.closest('textarea') && !e.target.closest('input')) {
+      clearSelectedCell();
+    }
+  });
+}
+
+// ============================================================
+//  GLOBAL PASTE HANDLER (for images)
+// ============================================================
+function setupGlobalPaste() {
+  document.addEventListener('paste', function(e) {
+    // Skip if user is editing text in an input/textarea (but not our cell selection)
+    var activeEl = document.activeElement;
+    if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+      return; // Let normal text paste happen
+    }
+
+    var items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        var blob = items[i].getAsFile();
+        handleImagePaste(blob);
+        return;
+      }
+    }
+  });
+}
+
+function handleImagePaste(blob) {
+  // Determine target cell
+  var targetCell = selectedCell;
+  if (!targetCell) {
+    // If no cell selected, try to find a cell to use
+    // Try currentCell first (being edited), then first visible cell
+    if (currentCell) {
+      targetCell = currentCell;
+    } else {
+      showToast('\u8BF7\u5148\u70B9\u51FB\u4E00\u4E2A\u5355\u5143\u683C\u518D\u7C98\u8D34\u56FE\u7247');
+      return;
+    }
+  }
+
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var base64 = ev.target.result;
+    addImageToCell(targetCell, base64);
+  };
+  reader.readAsDataURL(blob);
+}
+
+function addImageToCell(td, base64) {
+  var ri = parseInt(td.getAttribute('data-ri'));
+  var dimKey = td.getAttribute('data-key');
+  if (isNaN(ri) || !dimKey) return;
+
+  var tool = DATA.tools[ri];
+  if (!tool) return;
+
+  if (!tool._images) tool._images = {};
+  if (!tool._images[dimKey]) tool._images[dimKey] = [];
+
+  tool._images[dimKey].push(base64);
+  save();
+  renderAll();
+  showToast('\u56FE\u7247\u5DF2\u7C98\u8D34\u5230\u5355\u5143\u683C');
+}
+
+function deleteCellImage(dimKey, imgIdx) {
+  if (!isEditMode) return;
+  var td = selectedCell || currentCell;
+  if (!td) {
+    // Try to find from event
+    showToast('\u8BF7\u5148\u70B9\u51FB\u5355\u5143\u683C');
+    return;
+  }
+  var ri = parseInt(td.getAttribute('data-ri'));
+  if (isNaN(ri) || !DATA.tools[ri]) return;
+  var tool = DATA.tools[ri];
+  if (!tool._images || !tool._images[dimKey]) return;
+
+  tool._images[dimKey].splice(imgIdx, 1);
+  if (tool._images[dimKey].length === 0) delete tool._images[dimKey];
+  save();
+  renderAll();
+  showToast('\u56FE\u7247\u5DF2\u5220\u9664');
+}
+
+// ============================================================
+//  LIGHTBOX
+// ============================================================
+function openLightbox(src) {
+  var lb = document.getElementById('imgLightbox');
+  var img = document.getElementById('lightboxImg');
+  if (lb && img) {
+    img.src = src;
+    lb.classList.add('active');
+  }
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('imgLightbox')) return;
+  var lb = document.getElementById('imgLightbox');
+  if (lb) lb.classList.remove('active');
+}
+
+// ============================================================
+//  DRAG & DROP — COLUMNS
+// ============================================================
+function onColDragStart(e) {
+  if (!isEditMode) { e.preventDefault(); return; }
+  var ci = parseInt(this.getAttribute('data-ci'));
+  dragInfo = { type: 'col', index: ci, element: this };
+  this.classList.add('drag-ghost');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', String(ci));
+}
+
+function onColDragOver(e) {
+  if (!isEditMode || !dragInfo || dragInfo.type !== 'col') return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+
+  // Clear all highlights
+  var all = document.querySelectorAll('.th-tool');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('drag-over-left', 'drag-over-right');
+  }
+
+  var rect = this.getBoundingClientRect();
+  var mid = rect.left + rect.width / 2;
+  if (e.clientX < mid) {
+    this.classList.add('drag-over-left');
+  } else {
+    this.classList.add('drag-over-right');
+  }
+}
+
+function onColDragLeave(e) {
+  this.classList.remove('drag-over-left', 'drag-over-right');
+}
+
+function onColDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over-left', 'drag-over-right');
+
+  if (!isEditMode || !dragInfo || dragInfo.type !== 'col') return;
+
+  var fromCi = dragInfo.index;
+  var toTh = this;
+  var toCi = parseInt(toTh.getAttribute('data-ci'));
+
+  if (fromCi === toCi) { dragInfo = null; return; }
+
+  var rect = toTh.getBoundingClientRect();
+  var mid = rect.left + rect.width / 2;
+  var insertAfter = e.clientX > mid;
+
+  reorderTools(fromCi, toCi, insertAfter);
+  dragInfo = null;
+  save();
+  renderAll();
+  showToast('\u5DE5\u5177\u5217\u5DF2\u79FB\u52A8');
+}
+
+// ============================================================
+//  DRAG & DROP — ROWS
+// ============================================================
+function onRowDragStart(e) {
+  if (!isEditMode) { e.preventDefault(); return; }
+  var di = parseInt(this.getAttribute('data-di'));
+  dragInfo = { type: 'row', index: di, element: this };
+  this.classList.add('drag-ghost');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', String(di));
+}
+
+function onRowDragOver(e) {
+  if (!isEditMode || !dragInfo || dragInfo.type !== 'row') return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+
+  var all = document.querySelectorAll('.th-dim[draggable]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('drag-over-top', 'drag-over-bottom');
+  }
+
+  var rect = this.getBoundingClientRect();
+  var mid = rect.top + rect.height / 2;
+  if (e.clientY < mid) {
+    this.classList.add('drag-over-top');
+  } else {
+    this.classList.add('drag-over-bottom');
+  }
+}
+
+function onRowDragLeave(e) {
+  this.classList.remove('drag-over-top', 'drag-over-bottom');
+}
+
+function onRowDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over-top', 'drag-over-bottom');
+
+  if (!isEditMode || !dragInfo || dragInfo.type !== 'row') return;
+
+  var fromDi = dragInfo.index;
+  var toTh = this;
+  var toDi = parseInt(toTh.getAttribute('data-di'));
+
+  if (fromDi === toDi) { dragInfo = null; return; }
+
+  var rect = toTh.getBoundingClientRect();
+  var mid = rect.top + rect.height / 2;
+  var insertAfter = e.clientY > mid;
+
+  reorderDims(fromDi, toDi, insertAfter);
+  dragInfo = null;
+  save();
+  renderAll();
+  showToast('\u7EF4\u5EA6\u884C\u5DF2\u79FB\u52A8');
+}
+
+function onDragEnd(e) {
+  // Cleanup
+  if (dragInfo && dragInfo.element) {
+    dragInfo.element.classList.remove('drag-ghost');
+  }
+  var allH = document.querySelectorAll('.th-tool, .th-dim');
+  for (var i = 0; i < allH.length; i++) {
+    allH[i].classList.remove('drag-over-left', 'drag-over-right', 'drag-over-top', 'drag-over-bottom');
+  }
+  dragInfo = null;
+}
+
+function reorderTools(fromCi, toCi, insertAfter) {
+  var tools = getFilteredTools();
+  var fromTool = tools[fromCi];
+  var toTool = tools[toCi];
+
+  // Find real indices in DATA.tools
+  var fromRi = findRealToolIndex(fromTool);
+  var toRi = findRealToolIndex(toTool);
+  if (fromRi < 0 || toRi < 0) return;
+
+  // Remove from original position
+  var moved = DATA.tools.splice(fromRi, 1)[0];
+
+  // Calculate new position
+  var newPos = toRi;
+  if (fromRi < toRi) newPos--; // Adjust because we removed one element
+
+  if (insertAfter) newPos++;
+
+  DATA.tools.splice(newPos, 0, moved);
+}
+
+function reorderDims(fromDi, toDi, insertAfter) {
+  if (fromDi < 0 || toDi < 0 || fromDi >= DATA.dims.length || toDi >= DATA.dims.length) return;
+
+  var moved = DATA.dims.splice(fromDi, 1)[0];
+
+  var newPos = toDi;
+  if (fromDi < toDi) newPos--;
+
+  if (insertAfter) newPos++;
+
+  DATA.dims.splice(newPos, 0, moved);
+}
+
+// ============================================================
+//  CELL EDITING
+// ============================================================
+function startEdit(cellEl, ci, key, type) {
+  if (!isEditMode) return;
+  cancelEdit();
+
+  var tools = getFilteredTools();
+  var tool = tools[ci];
+  if (!tool) return;
+
+  currentCell = cellEl;
+  selectCell(cellEl);
+  var originalVal = tool[key];
+
+  if (type === 'score') {
+    var inp = document.createElement('input');
+    inp.type = 'number';
+    inp.min = '0'; inp.max = '100';
+    inp.value = originalVal || '0';
+    inp.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;border:none;text-align:center;font-size:16px;font-weight:700;background:#fff;z-index:10;outline:2px solid #1a56db;';
+    inp.addEventListener('blur', function() { finishEdit(inp, ci, key); });
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+      if (e.key === 'Escape') { cancelEdit(); }
+    });
+    inp.addEventListener('paste', function(e) {
+      // Check if pasting an image
+      var items = e.clipboardData && e.clipboardData.items;
+      if (items) {
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf('image') !== -1) {
+            e.preventDefault();
+            handleImagePaste(items[i].getAsFile());
+            return;
+          }
+        }
+      }
+    });
+    cellEl.appendChild(inp);
+    inp.focus();
+    inp.select();
+    return;
+  }
+
+  var inp = document.createElement(type === 'longtext' ? 'textarea' : 'input');
+  if (type === 'longtext') {
+    inp.value = originalVal || '';
+    var lines = String(originalVal || '').split('\n').length;
+    inp.rows = Math.max(3, Math.min(lines + 1, 10));
+  } else {
+    inp.value = originalVal != null ? originalVal : '';
+    inp.type = 'text';
+  }
+  inp.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;border:none;padding:10px 12px;font-size:12px;font-family:inherit;background:#fff;z-index:10;outline:2px solid #1a56db;resize:none;';
+
+  inp.addEventListener('blur', function() { finishEdit(inp, ci, key); });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && type !== 'longtext') { e.preventDefault(); inp.blur(); }
+    if (e.key === 'Escape') { cancelEdit(); }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      inp.blur();
+      moveToNextCell(cellEl, e.shiftKey);
+    }
+  });
+  inp.addEventListener('paste', function(e) {
+    // Check if pasting an image
+    var items = e.clipboardData && e.clipboardData.items;
+    if (items) {
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          handleImagePaste(items[i].getAsFile());
+          return;
+        }
+      }
+    }
+  });
+
+  cellEl.appendChild(inp);
+  inp.focus();
+  if (type !== 'longtext') inp.select();
+}
+
+function finishEdit(inp, ci, key) {
+  var newVal = inp.value;
+  setToolValue(ci, key, newVal);
+  currentCell = null;
+  inp.remove();
+}
+
+function cancelEdit() {
+  if (currentCell) {
+    var ed = currentCell.querySelector('.inline-editor, textarea, input[type=text], input[type=number]');
+    if (ed) ed.remove();
+    currentCell = null;
+  }
+}
+
+function setToolValue(ci, key, newVal) {
+  var tools = getFilteredTools();
+  var ft = tools[ci];
+  if (!ft) return;
+  var ri = findRealToolIndex(ft);
+  if (ri >= 0) {
+    DATA.tools[ri][key] = newVal;
+    save();
+    renderAll();
+  }
+}
+
+function moveToNextCell(currentEl, backwards) {
+  var cells = document.querySelectorAll('td.cell[data-type]');
+  var arr = Array.prototype.slice.call(cells);
+  var idx = arr.indexOf(currentEl);
+  if (idx === -1) return;
+  var len = arr.length;
+  var nextIdx = backwards ? (idx - 1 + len) % len : (idx + 1) % len;
+  var nc = arr[nextIdx];
+  startEdit(nc, parseInt(nc.getAttribute('data-ci')), nc.getAttribute('data-key'), nc.getAttribute('data-type'));
+}
+
+// ============================================================
+//  HEADER EDIT
+// ============================================================
+function saveHeaderEdit(inputEl) {
+  var ci = parseInt(inputEl.getAttribute('data-ci'));
+  var newVal = inputEl.value.trim();
+  if (newVal && ci >= 0) setToolValue(ci, 'name', newVal);
+}
+
+// ============================================================
+//  DIMENSION OPS — including DELETE
+// ============================================================
+function renameDim(di) {
+  if (!isEditMode) return;
+  var dim = DATA.dims[di];
+  if (!dim) return;
+  var newName = prompt('\u4FEE\u6539\u7EF4\u5EA6\u540D\u79F0:', dim.label);
+  if (newName && newName.trim()) {
+    DATA.dims[di].label = newName.trim();
+    save();
+    renderAll();
+  }
+}
+
+function deleteDim(di) {
+  if (!isEditMode) return;
+  var dim = DATA.dims[di];
+  if (!dim) return;
+  if (!confirm('\u786E\u5B9A\u5220\u9664\u7EF4\u5EA6\u884C\u300C' + dim.label + '\u300D\u5417?\uFF08\u4EC5\u5220\u9664\u8BE5\u884C\uFF0C\u4E0D\u5F71\u54CD\u5DE5\u5177\u6570\u636E\uFF09')) return;
+
+  DATA.dims.splice(di, 1);
+  save();
+  renderAll();
+  showToast('\u5DF2\u5220\u9664\u7EF4\u5EA6\u884C: ' + dim.label);
+}
+
+function showAddRow() {
+  if (!isEditMode) return;
+  var gn = prompt('\u8F93\u5165\u5206\u7EC4\u540D\u79F0:', '\u81EA\u5B9A\u4E49');
+  if (!gn) return;
+  var ln = prompt('\u8F93\u5165\u7EF4\u5EA6\u540D\u79F0:', '\u65B0\u7EF4\u5EA6');
+  if (!ln || !ln.trim()) return;
+  DATA.dims.push({
+    group: gn.trim(),
+    key: 'custom_' + Date.now(),
+    label: ln.trim(),
+    type: 'text'
+  });
+  save();
+  renderAll();
+  showToast('\u5DF2\u589E\u52A0\u7EF4\u5EA6');
+}
+
+// ============================================================
+//  TOOL COLUMN OPS
+// ============================================================
+function deleteTool(ci) {
+  if (!isEditMode) return;
+  var tools = getFilteredTools();
+  var t = tools[ci];
+  if (!t) return;
+  if (!confirm('\u786E\u5B9A\u5220\u9664\u300C' + t.name + '\u300D\u5417?')) return;
+
+  var ri = findRealToolIndex(t);
+  if (ri >= 0) DATA.tools.splice(ri, 1);
+  save();
+  renderAll();
+  showToast('\u5DF2\u5220\u9664: ' + t.name);
+}
+
+function showAddTool() {
+  if (!isEditMode) return;
+  var name = prompt('\u5DE5\u5177\u540D\u79F0:', '');
+  if (!name || !name.trim()) return;
+  var emoji = prompt('Emoji\u56FE\u6807:', '🔧');
+  var nameEn = prompt('\u82F1\u6587\u540D:', '');
+
+  DATA.tools.push({
+    emoji: emoji || '🔧',
+    name: name.trim(),
+    nameEn: nameEn ? nameEn.trim() : '',
+    positioning:'', platforms:[],
+    coreFeatures:'', pricingModel:'', officialPrice:'', freeQuota:'',
+    dataAccuracy:0, difficulty:0,
+    pros:'', cons:'', userNotes:'',
+    _images:{}
+  });
+  save();
+  renderAll();
+  showToast('\u5DF2\u589E\u52A0: ' + name.trim());
+}
+
+// ============================================================
+//  EXPORT / IMPORT
+// ============================================================
+function exportCSV() {
+  var tools = DATA.tools || [];
+  var dims = DATA.dims || [];
+
+  var csv = '\uFEFF';
+  csv += '\u7EF4\u5EA6';
+  for (var i = 0; i < tools.length; i++) csv += ',' + tools[i].name;
+  csv += '\n';
+
+  for (var di = 0; di < dims.length; di++) {
+    csv += '"' + (dims[di].label||'').replace(/"/g,'""') + '"';
+    for (var j = 0; j < tools.length; j++) {
+      var val = tools[j][dims[di].key];
+      if (val === undefined || val === null) val = '';
+      csv += ',"' + String(val).replace(/\n/g,' | ').replace(/"/g,'""') + '"';
+    }
+    csv += '\n';
+  }
+
+  downloadFile(csv, '\u8FD0\u8425\u5DE5\u5177\u5BF9\u6BD4\u603B\u8868_' + todayStr() + '.csv', 'text/csv;charset=utf-8');
+  showToast('CSV \u5BFC\u51FA\u6210\u529F');
+}
+
+function exportJSON() {
+  var json = JSON.stringify(DATA, null, 2);
+  downloadFile(json, '\u5DE5\u5177\u5BF9\u6BD7\u5907\u4EFD_' + todayStr() + '.json', 'application/json');
+  showToast('JSON \u5907\u4EFD\u6210\u529F');
+}
+
+function importData() {
+  if (!isEditMode) return;
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var imported = JSON.parse(ev.target.result);
+        if (confirm('\u5BFC\u5165\u5C06\u66FF\u6362\u5F53\u524D\u6240\u6709\u6570\u636E\uFF01\u786E\u5B9A\u7EE7\u7EED?')) {
+          DATA = imported;
+          sanitizeAllImages();
+          save();
+          setupPlatformOptions();
+          renderAll();
+          showToast('\u6570\u636E\u5BFC\u5165\u6210\u529F!');
+        }
+      } catch(err) {
+        alert('\u6587\u4EF6\u683C\u5F0F\u9519\u8BEF');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function downloadFile(content, filename, mimeType) {
+  var blob = new Blob([content], {type: mimeType});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function todayStr() {
+  var d = new Date();
+  var p = function(n){return n<10?'0'+n:''+n};
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+</script>
+
+</body>
+</html>
