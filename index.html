@@ -751,10 +751,12 @@ function renderCell(tool, dim, ci) {
 
   } else if (dataType === 'tags') {
     cls += ' cell-tag';
-    if (Array.isArray(val) && val.length > 0) {
+    // Normalize: support both array and legacy comma-separated string
+    var tagsArr = Array.isArray(val) ? val : (val && typeof val === 'string' ? val.split(',').map(function(s){return s.trim()}).filter(Boolean) : []);
+    if (tagsArr.length > 0) {
       var tags = [];
-      for (var ti = 0; ti < val.length; ti++) {
-        tags.push('<span class="tag ' + getTagCls(val[ti]) + '">' + esc(val[ti]) + '</span>');
+      for (var ti = 0; ti < tagsArr.length; ti++) {
+        tags.push('<span class="tag ' + getTagCls(tagsArr[ti]) + '">' + esc(tagsArr[ti]) + '</span>');
       }
       content = tags.join('');
     } else {
@@ -1305,6 +1307,27 @@ function startEdit(cellEl, ci, key, type) {
   selectCell(cellEl);
   var originalVal = tool[key];
 
+  if (type === 'tags') {
+    var arrVal = Array.isArray(originalVal) ? originalVal : (typeof originalVal === 'string' ? originalVal.split(',').map(function(s){return s.trim()}).filter(Boolean) : []);
+    var tagInp = document.createElement('input');
+    tagInp.value = arrVal.join(', ');
+    tagInp.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;border:none;padding:10px 12px;font-size:12px;font-family:inherit;background:#fff;z-index:10;outline:2px solid #1a56db;resize:none;';
+    tagInp.addEventListener('blur', function() { finishEdit(tagInp, ci, key); });
+    tagInp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); tagInp.blur(); }
+      if (e.key === 'Escape') { cancelEdit(); }
+      if (e.key === 'Tab') { e.preventDefault(); tagInp.blur(); moveToNextCell(cellEl, e.shiftKey); }
+    });
+    tagInp.addEventListener('paste', function(e) {
+      var items = e.clipboardData && e.clipboardData.items;
+      if (items) { for (var i = 0; i < items.length; i++) { if (items[i].type.indexOf('image') !== -1) { e.preventDefault(); handleImagePaste(items[i].getAsFile()); return; } } }
+    });
+    cellEl.appendChild(tagInp);
+    tagInp.focus();
+    tagInp.select();
+    return;
+  }
+
   if (type === 'score') {
     var inp = document.createElement('input');
     inp.type = 'number';
@@ -1396,6 +1419,16 @@ function setToolValue(ci, key, newVal) {
   if (!ft) return;
   var ri = findRealToolIndex(ft);
   if (ri >= 0) {
+    // For tags type: convert comma-separated string back to array
+    var dim = null;
+    for (var d = 0; d < (DATA.dims || []).length; d++) {
+      if (DATA.dims[d].key === key) { dim = DATA.dims[d]; break; }
+    }
+    if (dim && dim.type === 'tags') {
+      newVal = typeof newVal === 'string'
+        ? newVal.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; })
+        : (Array.isArray(newVal) ? newVal : []);
+    }
     DATA.tools[ri][key] = newVal;
     save();
     renderAll();
